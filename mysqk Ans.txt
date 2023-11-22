@@ -1,0 +1,144 @@
+1.Find all customers who have account but no loan at the bank
+
+SELECT Customer.c_name
+FROM Customer
+JOIN Depositor ON Customer.c_name = Depositor.c_name
+JOIN Account ON Depositor.acc_no = Account.Acc_no
+LEFT JOIN Borrower ON Customer.c_name = Borrower.c_name
+WHERE Borrower.c_name IS NULL;
+----------------------------------------------------
+
+Find all customers who have both account and loan at bank.
+
+SELECT DISTINCT Customer.c_name
+FROM Customer
+JOIN Depositor ON Customer.c_name = Depositor.c_name
+JOIN Account ON Depositor.acc_no = Account.Acc_no
+JOIN Borrower ON Customer.c_name = Borrower.c_name
+JOIN loan ON Borrower.loan_no = loan.loan_no;
+----------------------------------------------------
+
+Find all customers who have an account or loan or both at bank.
+
+SELECT DISTINCT Customer.c_name
+FROM Customer
+LEFT JOIN Depositor ON Customer.c_name = Depositor.c_name
+LEFT JOIN Account ON Depositor.acc_no = Account.Acc_no
+LEFT JOIN Borrower ON Customer.c_name = Borrower.c_name
+LEFT JOIN loan ON Borrower.loan_no = loan.loan_no
+WHERE Account.Acc_no IS NOT NULL OR loan.loan_no IS NOT NULL;
+
+---------------------OR-----------------
+
+SELECT DISTINCT c.c_name
+FROM Customer c
+WHERE EXISTS (
+    SELECT 1
+    FROM Depositor d
+    WHERE d.c_name = c.c_name
+) OR EXISTS (
+    SELECT 1
+    FROM Borrower b
+    WHERE b.c_name = c.c_name
+) OR c.c_name IN (
+    SELECT c_name
+    FROM Borrower
+    WHERE c_name IN (
+        SELECT c_name
+        FROM Depositor
+    )
+);
+-------------------------------------------
+
+Find the branches where average account balance > 15000.
+
+SELECT ACCOUNT.B_NAME FROM ACCOUNT GROUP BY ACCOUNT.B_NAME HAVING AVG(ACCOUNT.BALANCE) > 150000;
+-------------------------------------------
+
+Find number of tuples in customer relation.
+SELECT COUNT(*) AS NUMBEROFTUPLES FROM CUSTOMER;
+-------------------------------------------------------
+Calculate total loan amount given by bank
+SELECT SUM(AMOUNT) AS SUMMESION FROM LOAN;
+-------------------------------------------------------
+Delete all loans with loan amount between 1300 and 1500.
+
+DELETE FROM LOAN WHERE AMOUNT BETWEEN 800000 AND 910000;
+-------------------------------------------------------
+Find the average account balance at each branch
+
+SELECT b_name, AVG(balance) AS AverageBalance
+FROM Account
+GROUP BY b_name;
+
+-------------------------------------------------------
+List all customers in alphabetical order who have loan from „Wadia College‟ branch
+
+SELECT CUSTOMER.C_NAME FROM CUSTOMER,BORROWER ,LOAN WHERE CUSTOMER.C_NAME = BORROWER.C_NAME AND LOAN.LOAN_NO = BORROWER.LOAN_NO AND LOAN.B_NAME ='CHINCHWAD' ORDER BY CUSTOMER.C_NAME;
+
+
+-------------------------------------------------------
+
+Display distinct cities of branch.
+
+ SELECT DISTINCT B_CITY AS DISTINCT_CITIES FROM BRANCH;
+
+-------------------------------------------------------
+
+
+
+
+SELECT C.c_name
+FROM Customer C
+WHERE EXISTS (
+    SELECT * FROM Depositor D WHERE C.c_name = D.c_name
+) AND EXISTS (
+    SELECT * FROM Borrower B WHERE C.c_name = B.c_name
+);
+
+------------------------------------------
+Create View2 on branch table by selecting any two columns and perform insert update delete operations.
+
+CREATE VIEW VIEW2 AS SELECT B_CITY,ASSETS FROM BRANCH;
+INSERT IGNORE INTO VIEW2 VALUES("AHAMEDABAD",900000000);
+UPDATE VIEW2 SET B_CITY = "GUJRAT" WHERE ASSETS = 900000000;
+DELETE FROM VIEW2 WHERE B_CITY = "GUJRAT";
+-----------------------------------------------
+
+Create a View1 to display List all customers in alphabetical order who have loan from Pune_Station branch.
+CREATE VIEW VIEW1 AS SELECT BORROWER.C_NAME FROM  BORROWER,LOAN WHERE BORROWER.LOAN_NO = LOAN.LOAN_NO AND LOAN.B_NAME = "THANE";
+
+-------------------------------------------------
+
+Create Simple and Unique index.
+
+CREATE INDEX IDX ON BRANCH(B_NAME);
+CREATE UINIQUE INDEX IDX ON BRANCH(B_NAME);
+
+---------------------------------------------
+Display index Information.
+SHOW INDEX FROM BRANCH;
+SELECT* FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_NAME = "BRANCH";
+-------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

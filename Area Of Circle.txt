@@ -1,0 +1,19 @@
+create table sw(
+    r number(2),
+    area number(10,2)
+)
+declare
+	r number(2);
+	area number(10,2);
+	pi constant number(5,2):=3.14;
+begin
+	r:=5;
+while r<=9
+loop
+	area:= pi*r*r;
+insert into sw values(r,area);
+r:=r+1;
+end loop;
+end;
+
+select* from sumedh;

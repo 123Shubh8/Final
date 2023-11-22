@@ -1,0 +1,144 @@
+Find _id, Designation, Address and Name from all documents where Company_name is "Infosys".
+
+db.Sumedh.find({Company : 'TCS'},{EmpId :1,Designation :1,Address : 1, Name : 1});
+
+-----------------
+
+Find documents where Designation is not equal to "Developer".
+db.Sumedh.find({$nor : [{Designation : 'Tester'}]});
+-----------------------
+
+Finds all documents with Company_name: "TCS" and modifies their salary field by 2000.
+
+db.Sumedh.update({Company : 'Infosys'},{$inc : {salary : 111}},{multi :true});
+
+db.Sumedh.find({Company : 'TCS'});
+
+db.Sumedh.update({Company : 'Barclays'},{$inc : {Salary : 333}},{multi : true});
+
+db.Sumedh.update({Company : 'Infosys'},{$inc :{Salary : 121}});
+------------------------------
+
+Selects all documents in the employee collection where the value of the Designation is either "Developer" or "Tester
+
+db.Sumedh.find({Designation : {$in : ['Employee', 'Tester']}});
+
+db.Sumedh.find({$or : [{Designation :'Employee'},{Designation:'Tester'}]});\
+
+--------------------------------
+
+Find all document with Exact Match on an Array having Expertise: ['Mongodb','Mysql', 'Cassandra']
+db.Sumedh.find({Experties : {$in :['C++,Java','C++']}});
+
+
+---------------------------------
+Return Designation with Total Salary is Above 2000000
+
+ db.Sumedh.find({Salary: {$gt :1000000}});
+
+-------------------------------
+Find Employee with Total Salary for Each City with Designation="DBA"
+
+db.Sumedh.aggregate([
+  { $match: { Designation: "Employee" } },
+  { $group: { _id: "$Name", TotalSalary: { $sum: "$Salary" } } }
+]);
+
+ db.Sumedh.aggregate([{$match : {Designation : 'Tester'}},{$group : {_id: "$Name",TotalSalary :{$sum:'$Salary'}}}]);
+
+------------------------------------
+
+Creates a new document if no document in the employee collection contains
+{Designation: "Tester", Company_name: "TCS", Age: 25}
+
+
+ db.Sumedh.update({Designation :"Tester",Company:"TCS",Age:25}, {$setOnInsert:{Designation:"Tester",Company:"TCS",Age:25} });
+-----------------------------------------
+Increase salary of each Employee working with “Infosys" 10000
+
+ db.Sumedh.update({Company:"Barclays"},{$inc:{Salary:11000}});
+
+------------------------------------------
+
+Finds all employees working with "TCS" and reduce their salary by 5000.
+
+db.Sumedh.updateMany({Company:"Intel"},{$inc:{Salary:-5000}});
+
+
+--------------------------------------------
+
+Return documents where Designation is not equal to "Tester".
+ db.Sumedh.find({$nor:[{Designation:"Tester"}]});
+----------------------------------------------
+
+Find all employee with Exact Match on an Array having Expertise: ['Mongodb','Mysql','Cassandra']
+ db.Sumedh.find({Experties:"Mongodb','Mysql','Cassandra"});
+
+-------------------------------------------
+
+Final name of Employee where age is less than 30 and salary more than 50000\
+db.Sumedh.find({Age:{$lt:23},Salary:{$gt:1000000}},{Name:1});
+-------------------------------------------
+Selects all documents in the collection where the field age has a value less than 30 or the value of the salary field is greater than 40000
+db.Sumedh.find({$or:[{Age:{$lt:22}, Salary:{$gt:1000000}}]});
+ 
+-------------------------------------------
+Find documents where Designation is not equal to "Developer"
+db.Sumedh.find({$nor:[{Designation:"Employee"}]});
+
+----------------------------------------------
+Drop Single documents where designation="Developer".
+
+db.Sumedh.deleteOne({Designation:"Employee"});
+--------------------------------------------------
+Count number of documents in employee collection.
+db.Sumedh.countDocuments({});
+
+--------------------------------------------------
+
+Find employee details who are working as "Developer" or "Tester".
+db.Sumedh.find({$or:[{Designation:'Tester',Designation:'Programmer'}]});
+
+--------------------------------------------------
+Using aggregation Return Designation with Total Salary is Above 200000
+db.Sumedh.aggregate([{$group:{_id:"$Designation",TotalSalary:{$sum:"$Salary"}}},{$match: {TotalSalary:{$gt : 2000000}}}]);
+
+
+--------------------------------------------------
+Using aggregation method find Employee with Total Salary for Each City with Designation="DBA".
+db.Sumedh.aggregate([{$match:{Designation:"Programmer"}},{$group:{_id:"$LAdd",TotalSalary:{$sum:"$Salary"}}}]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
